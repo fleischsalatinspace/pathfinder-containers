@@ -23,5 +23,5 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag goryn-pathfinder-containers:$(date +%H:%M:%S%z)
+      run: docker build . --file Dockerfile --tag goryn-pathfinder-containers:$(date +%s)
 
