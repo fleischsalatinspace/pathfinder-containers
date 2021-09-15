@@ -16,3 +16,6 @@ mkdir -p .vscode && cp ./development/launch.json ./.vscode/launch.json
 # seed .env file with dev presets
 echo "path=\"$(pwd)\"" > ./.env
 cat ./development/.env.development >> ./.env
+
+# copy Vagrantfile
+cp ./development/Vagrantfile ./Vagrantfile
