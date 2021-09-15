@@ -16,9 +16,17 @@ source KISS-lib/kiss-backup-sql.sh
 # backup location
 BACKUP_LOCATION="/var/backups/"
 
-# KISS-framework related variables
+# KISS-framework variables
+# name of the database container (see docker-compose.yml)
 KISS_DB_CONTAINERNAME="pfdb"
-KISS_APP_NAME="pf"
+# name of pathfinder db in database container (static)
+KISS_DB_NAME="pf"
+# name of database user to connect with (static)
+KISS_DB_USER="root"
+
+# source CONTAINER_NAME from .env file
+# shellcheck source=/dev/null (https://github.com/koalaman/shellcheck/wiki/SC1090)
+source <(grep CONTAINER_NAME .env)
 
 # check if we are root, if not use sudo
 SUDO=''

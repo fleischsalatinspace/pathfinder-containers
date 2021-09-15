@@ -9,7 +9,7 @@ cron-backup-sql() {
 	fi
 	msg "${GREEN}OK${NOFORMAT} Successfully created backup location at ${BACKUP_LOCATION}"
         msg "Creating MySQL backup"
-	if ! ${COMPOSE} exec "${KISS_DB_CONTAINERNAME}" sh -c "exec mysqldump \${MYSQL_DATABASE} -u\${MYSQL_USER} -p\${MYSQL_PASSWORD}" | gzip > "${BACKUP_LOCATION}/backup_database_${KISS_APP_NAME}.sql.gz" ; then
+	if ! ${COMPOSE} exec "${KISS_DB_CONTAINERNAME}" sh -c "exec mysqldump ${KISS_DB_NAME} -u${KISS_DB_USER} -p\${MYSQL_ROOT_PASSWORD}" | gzip > "${BACKUP_LOCATION}/backup_database_${CONTAINER_NAME}.sql.gz" ; then
         	msg "${RED}ERROR${NOFORMAT} Failed to create MySQL backup."
 		exit 1
 	fi
@@ -25,7 +25,7 @@ backup-sql() {
 	fi
 	msg "${GREEN}OK${NOFORMAT} Successfully created backup location at ${BACKUP_LOCATION}"
         msg "Creating MySQL backup"
-	if ! ${COMPOSE} exec "${KISS_DB_CONTAINERNAME}" sh -c "exec mysqldump \${MYSQL_DATABASE} -u\${MYSQL_USER} -p\${MYSQL_PASSWORD}" | gzip > "${BACKUP_LOCATION}/backup_database_${KISS_APP_NAME}.sql.gz" ; then
+	if ! ${COMPOSE} exec "${KISS_DB_CONTAINERNAME}" sh -c "exec mysqldump ${KISS_DB_NAME} -u${KISS_DB_USER} -p\${MYSQL_ROOT_PASSWORD}" | gzip > "${BACKUP_LOCATION}/backup_database_${CONTAINER_NAME}.sql.gz" ; then
         	msg "${RED}ERROR${NOFORMAT} Failed to create MySQL backup. ${YELLOW}Execute bash -x \$yourscriptfile.sh for debugging.${NOFORMAT}"
 		exit 1
 	fi
@@ -55,7 +55,7 @@ restore-sql() {
 	sleep 10
 	msg "${GREEN}OK${NOFORMAT} Successfully started MySQL docker containers"
         msg "Restoring MySQL backup"
-	if ! gunzip < "${RESTORE_TAR_PATH}"/backup_database_"${KISS_APP_NAME}".sql.gz | ${COMPOSE} exec -T "${KISS_DB_CONTAINERNAME}" sh -c "exec mysql \${MYSQL_DATABASE} -u\${MYSQL_USER} -p\${MYSQL_PASSWORD}" ; then
+	if ! gunzip < "${RESTORE_TAR_PATH}"/backup_database_"${CONTAINER_NAME}".sql.gz | ${COMPOSE} exec -T "${KISS_DB_CONTAINERNAME}" sh -c "exec mysql ${KISS_DB_NAME} -u${KISS_DB_USER} -p\${MYSQL_ROOT_PASSWORD}" ; then
         	msg "${RED}ERROR${NOFORMAT} Failed to restore MySQL backup. ${YELLOW}Execute bash -x \$yourscriptfile.sh for debugging.${NOFORMAT}"
 		exit 1
 	fi
@@ -78,7 +78,7 @@ verify-backup-sql() {
 	fi
 	msg "${GREEN}OK${NOFORMAT} Successfully verified backup directory"
         msg "Verifying database backup file"
-	if ! ${SUDO} gzip -t -v "${ARCHIVE_PATH}"/backup_database_"${KISS_APP_NAME}".sql.gz >/dev/null 2>&1 ; then
+	if ! ${SUDO} gzip -t -v "${ARCHIVE_PATH}"/backup_database_"${CONTAINER_NAME}".sql.gz >/dev/null 2>&1 ; then
               msg "${RED}ERROR${NOFORMAT} Failed to verify backup file of ${i}. ${YELLOW}Execute bash -x \$yourscriptfile.sh for debugging.${NOFORMAT}"
 	      exit 1
 	fi
