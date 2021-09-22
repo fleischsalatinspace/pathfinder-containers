@@ -12,7 +12,9 @@ WORKDIR /app
 RUN composer self-update 2.1.8
 RUN composer install
 
-FROM trafex/alpine-nginx-php7:ba1dd422
+FROM trafex/alpine-nginx-php7:1.10.0
+# we need to switch to root because base image downgrades to user nobody
+USER root
 RUN apk update && apk add --no-cache busybox-suid sudo php7-redis php7-pdo php7-pdo_mysql php7-fileinfo shadow gettext bash apache2-utils
 
 COPY static/nginx/nginx.conf /etc/nginx/templateNginx.conf
