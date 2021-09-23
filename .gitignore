@@ -3,3 +3,5 @@
 letsencrypt
 .vagrant
 Vagrantfile
+*.production*
+static/php/xdebug.ini
