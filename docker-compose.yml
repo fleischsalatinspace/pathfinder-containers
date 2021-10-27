@@ -67,6 +67,7 @@ services:
       - ${PROJECT_ROOT}/config/pathfinder/config.ini:/var/www/html/pathfinder/app/templateConfig.ini
       - ${PROJECT_ROOT}/config/pathfinder/pathfinder.ini:/var/www/html/pathfinder/app/pathfinder.ini
       - ${PROJECT_ROOT}/config/pathfinder/plugin.ini:/var/www/html/pathfinder/app/plugin.ini
+      - ${PROJECT_ROOT}/config/pathfinder/info_panel.html:/var/www/html/pathfinder/public/templates/ui/info_panel.html
     depends_on:
       - pfdb
       - pf-redis
