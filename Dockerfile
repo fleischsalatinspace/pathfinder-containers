@@ -18,6 +18,7 @@ RUN apk update && apk add --no-cache busybox-suid sudo php7-redis php7-pdo php7-
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
  && ln -sf /dev/stderr /var/log/nginx/error.log
 
+COPY static/logrotate/pathfinder /etc/logrotate.d/pathfinder
 COPY static/nginx/nginx.conf /etc/nginx/templateNginx.conf
 # we need to create sites_enabled directory in order for entrypoint.sh being able to copy file after envsubst
 RUN mkdir -p /etc/nginx/sites_enabled/
