@@ -36,6 +36,7 @@ A fork of techfreak's [Pathfinder-container](https://gitlab.com/techfreak/pathfi
       * `esi-corporations.read_corporation_membership.v1`
       * `esi-clones.read_clones.v1`
       * `esi-characters.read_corporation_roles.v1`
+      * `esi-search.search_structures.v1`
     * Set your "CALLBACK URL" to `https://[YOUR_DOMAIN]/sso/callbackAuthorization`</br></br>
   
   
@@ -89,7 +90,7 @@ A fork of techfreak's [Pathfinder-container](https://gitlab.com/techfreak/pathfi
     docker-compose exec pfdb /bin/sh -c "unzip -p eve_universe.sql.zip | mysql -u root -p\$MYSQL_ROOT_PASSWORD eve_universe";
 
 1. **When everthing works, configure Traefik correctly for production**
-    * Remove the beta CA server lines [(#87 - #90)](https://github.com/goryn-clade/pathfinder-containers/blob/master/docker-compose.yml#L87-L90) from `docker-compose.yml`. 
+    * Remove the staging CA server line [(#89)](https://github.com/goryn-clade/pathfinder-containers/blob/master/docker-compose.yml#L89) from `docker-compose.yml`. 
     * Delete the `./letsencrypt/acme.json` configuration file so Let's Encrypt will get a new certificate.</br></br>
     * If you are not the root user on your host you may need to edit file permissions. Docker-engine creates the `letsencrypt` director as root user, which means that you would need to prefix `sudo` on any future docker commands (`sudo docker-compose up` etc). To avoid doing this you can take ownership of the letsencrypt directory by running `sudo chown -R $USER ./letsencrypt`.
 
@@ -124,7 +125,7 @@ Development configs and docker files can be quickly restored using:
 chmod +x ./development/development.sh && ./development/development.sh
 ```
 
-This creates a partial `.env` file, but you will need to add your CCP SSO client and keys manually.
+This creates a partial `.env` file, but you will need to add your CCP SSO client and keys manually, if you want to copy development files without overwriting your .env file add the flag `--noenv` when running the script.
 
 It's best to create a new SSO application for development work, so that you can set the callback url to `https://localhost/sso/callbackAuthorization`.
 
