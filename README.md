@@ -47,15 +47,31 @@ A fork of techfreak's [Pathfinder-container](https://gitlab.com/techfreak/pathfi
 
 1. **Create a *.env* file (copy .env.example) and make sure every config option has an entry.**
     ```shell
-    PROJECT_ROOT=""       # The path of the cloned repo 
+    PROJECT_ROOT=""       # The path of the cloned repo
     CONTAINER_NAME="pf"   # docker container name prefix
     DOMAIN=""             # The domain you will be using
     APP_PASSWORD=""       # Password for /setup
-    MYSQL_PASSWORD=""     # Mysql Password
+    MYSQL_HOST="mariadb"  # mysql host
+    MYSQL_PORT="3306"     # default mysql port
+    MYSQL_USER="root"     # mysql root user
+    MYSQL_PASSWORD=""     # mysql Password
     CCP_SSO_CLIENT_ID=""  # Use the SSO tokens created in step 1
-    CCP_SSO_SECRET_KEY="" 
+    CCP_SSO_SECRET_KEY=""
     CCP_ESI_SCOPES="esi-location.read_online.v1,esi-location.read_location.v1,esi-location.read_ship_type.v1,esi-ui.write_waypoint.v1,esi-ui.open_window.v1,esi-universe.read_structures.v1,esi-corporations.read_corporation_membership.v1,esi-clones.read_clones.v1,esi-characters.read_corporation_roles.v1"
-
+    MYSQL_PF_DB_NAME="pathfinder" # mysql pathfinder table name
+    MYSQL_UNIVERSE_DB_NAME="eve_universe"
+    MYSQL_CCP_DB_NAME="eve_lifeblood_min"
+    REDIS_HOST="redis"    # redis host
+    REDIS_PORT="6379"     # default redis port
+    PATHFINDER_SOCKET_HOST="pathfinder-socket" # domain of the websocket container, relative to the main pf container
+    PATHFINDER_SOCKET_PORT="5555"              # default tcp socket port
+    SMTP_HOST=""
+    SMTP_PORT=""
+    SMTP_SCHEME=""
+    SMTP_USER=""
+    SMTP_PASS=""
+    SMTP_FROM=""
+    SMTP_ERROR=""
 > The `PROJECT_ROOT` key is the *absolute* path to the project directory, ie if you have clone it to /app/pathfinder-containers, this is the value you should enter. If you're unsure of the absolute path, you can use the command `pwd` to get the full absolute path of the current directory.
 
 1. **Edit the *config/pathfinder/pathfinder.ini*** to your liking
@@ -76,7 +92,7 @@ A fork of techfreak's [Pathfinder-container](https://gitlab.com/techfreak/pathfi
     
 1. **Build & Run it**
     ```shell
-    docker network create web && docker-compose up -d --build
+    docker network create web && docker-compose up -d
     ```
 
 1. **Open the http://< your-domain >/setup page.**
@@ -90,7 +106,7 @@ A fork of techfreak's [Pathfinder-container](https://gitlab.com/techfreak/pathfi
     docker-compose exec pfdb /bin/sh -c "unzip -p eve_universe.sql.zip | mysql -u root -p\$MYSQL_ROOT_PASSWORD eve_universe";
 
 1. **When everthing works, configure Traefik correctly for production**
-    * Remove the staging CA server line [(#89)](https://github.com/goryn-clade/pathfinder-containers/blob/master/docker-compose.yml#L89) from `docker-compose.yml`. 
+    * Remove the staging CA server line  from `docker-compose.yml`from the `command` block of the traefik service definition. 
     * Delete the `./letsencrypt/acme.json` configuration file so Let's Encrypt will get a new certificate.</br></br>
     * If you are not the root user on your host you may need to edit file permissions. Docker-engine creates the `letsencrypt` director as root user, which means that you would need to prefix `sudo` on any future docker commands (`sudo docker-compose up` etc). To avoid doing this you can take ownership of the letsencrypt directory by running `sudo chown -R $USER ./letsencrypt`.
 
