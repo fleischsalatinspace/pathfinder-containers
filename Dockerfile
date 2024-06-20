@@ -1,4 +1,4 @@
-FROM php:7.2.34-fpm-alpine3.12 as build
+FROM php:7.4.33-zts-alpine3.16 as build
 
 RUN apk update \
     && apk add --no-cache libpng-dev  zeromq-dev git \
